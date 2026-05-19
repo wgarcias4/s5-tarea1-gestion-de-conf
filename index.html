@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link
@@ -7,11 +7,696 @@
       href="https://cdn-icons-png.flaticon.com/512/5930/5930147.png"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>02-tic-tac-toe</title>
+    <title>AuraPods Pro | Sonido que inspira</title>
+    <style>
+      /* ===== RESET & VARIABLES ===== */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --color-primary: #6c5ce7;
+        --color-primary-dark: #5a4bd1;
+        --color-accent: #00cec9;
+        --color-bg: #f8f9fc;
+        --color-white: #ffffff;
+        --color-text: #2d3436;
+        --color-text-light: #636e72;
+        --color-card: #ffffff;
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 20px 50px rgba(108, 92, 231, 0.2);
+        --radius: 16px;
+        --radius-sm: 10px;
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background-color: var(--color-bg);
+        color: var(--color-text);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ===== UTILIDADES ===== */
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.85rem 2rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        transition: var(--transition);
+        white-space: nowrap;
+      }
+
+      .btn-primary {
+        background: var(--color-primary);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(108, 92, 231, 0.35);
+      }
+      .btn-primary:hover {
+        background: var(--color-primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(108, 92, 231, 0.45);
+      }
+
+      .btn-outline {
+        background: transparent;
+        color: var(--color-primary);
+        border: 2px solid var(--color-primary);
+      }
+      .btn-outline:hover {
+        background: var(--color-primary);
+        color: #fff;
+        transform: translateY(-2px);
+      }
+
+      .section-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 0.5rem;
+      }
+      .section-subtitle {
+        text-align: center;
+        color: var(--color-text-light);
+        font-size: 1.05rem;
+        margin-bottom: 3rem;
+      }
+
+      /* ===== HEADER / NAV ===== */
+      .site-header {
+        background: var(--color-white);
+        box-shadow: var(--shadow-sm);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.92);
+      }
+
+      .site-header .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--color-primary);
+        text-decoration: none;
+      }
+      .logo-icon {
+        width: 36px;
+        height: 36px;
+        background: var(--color-primary);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 1.2rem;
+      }
+
+      .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+        align-items: center;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: var(--color-text);
+        font-weight: 500;
+        transition: color var(--transition);
+        font-size: 0.95rem;
+      }
+      .nav-links a:hover {
+        color: var(--color-primary);
+      }
+
+      /* ===== HERO SECTION ===== */
+      .hero {
+        padding: 4rem 0 5rem;
+      }
+      .hero .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: center;
+      }
+      .hero-content h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+      }
+      .hero-content h1 .highlight {
+        background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .hero-content p {
+        font-size: 1.1rem;
+        color: var(--color-text-light);
+        margin-bottom: 2rem;
+        max-width: 450px;
+      }
+      .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .hero-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .hero-image figure {
+        position: relative;
+      }
+      .hero-image img {
+        max-width: 100%;
+        height: auto;
+        filter: drop-shadow(0 20px 40px rgba(108, 92, 231, 0.3));
+        animation: float 4s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-16px);
+        }
+      }
+
+      /* ===== FEATURES SECTION ===== */
+      .features {
+        padding: 5rem 0;
+        background: var(--color-white);
+        border-radius: 40px 40px 0 0;
+      }
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+      }
+      .feature-card {
+        background: var(--color-bg);
+        border-radius: var(--radius);
+        padding: 2rem 1.8rem;
+        text-align: center;
+        transition: var(--transition);
+        border: 1px solid transparent;
+      }
+      .feature-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-md);
+        border-color: #e0e0f0;
+      }
+      .feature-icon {
+        width: 60px;
+        height: 60px;
+        background: var(--color-primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.2rem;
+        font-size: 1.6rem;
+        color: #fff;
+      }
+      .feature-card h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+      }
+      .feature-card p {
+        color: var(--color-text-light);
+        font-size: 0.95rem;
+      }
+
+      /* ===== TESTIMONIALS SECTION ===== */
+      .testimonials {
+        padding: 5rem 0;
+      }
+      .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+      .testimonial-card {
+        background: var(--color-card);
+        border-radius: var(--radius);
+        padding: 2rem;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+      }
+      .testimonial-card:hover {
+        box-shadow: var(--shadow-md);
+      }
+      .testimonial-card blockquote {
+        font-style: italic;
+        color: var(--color-text-light);
+        margin-bottom: 1.2rem;
+        position: relative;
+        padding-left: 1.5rem;
+        border-left: 3px solid var(--color-accent);
+      }
+      .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+      }
+      .testimonial-author img {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      .testimonial-author strong {
+        display: block;
+        font-size: 0.95rem;
+      }
+      .testimonial-author span {
+        font-size: 0.8rem;
+        color: var(--color-text-light);
+      }
+
+      /* ===== CTA SECTION ===== */
+      .cta {
+        padding: 5rem 0;
+        background: linear-gradient(135deg, var(--color-primary), #a29bfe);
+        border-radius: 40px;
+        margin: 2rem 1.5rem;
+        text-align: center;
+        color: #fff;
+      }
+      .cta .container {
+        max-width: 700px;
+      }
+      .cta h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+      .cta p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+      }
+      .cta .btn-primary {
+        background: #fff;
+        color: var(--color-primary);
+        box-shadow: var(--shadow-lg);
+      }
+      .cta .btn-primary:hover {
+        background: #f0f0ff;
+      }
+      .price-tag {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50px;
+        padding: 0.5rem 1.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+      .price-tag .old-price {
+        text-decoration: line-through;
+        opacity: 0.7;
+        margin-right: 0.5rem;
+      }
+      .price-tag .new-price {
+        font-size: 1.5rem;
+      }
+
+      /* ===== FOOTER ===== */
+      .site-footer {
+        background: #1a1a2e;
+        color: #ccc;
+        padding: 3rem 0 1.5rem;
+        border-radius: 40px 40px 0 0;
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2.5rem;
+        margin-bottom: 2rem;
+      }
+      .footer-col h4 {
+        color: #fff;
+        margin-bottom: 1rem;
+        font-size: 1.05rem;
+      }
+      .footer-col ul {
+        list-style: none;
+      }
+      .footer-col ul li {
+        margin-bottom: 0.5rem;
+      }
+      .footer-col ul li a {
+        color: #aaa;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color var(--transition);
+      }
+      .footer-col ul li a:hover {
+        color: var(--color-accent);
+      }
+      .footer-bottom {
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 1.5rem;
+        font-size: 0.85rem;
+        color: #777;
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 768px) {
+        .hero .container {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .hero-content h1 {
+          font-size: 2.2rem;
+        }
+        .hero-content p {
+          max-width: 100%;
+        }
+        .hero-buttons {
+          justify-content: center;
+        }
+        .hero-image {
+          order: -1;
+        }
+        .hero-image img {
+          max-width: 260px;
+        }
+        .nav-links {
+          display: none;
+        }
+        .section-title {
+          font-size: 1.7rem;
+        }
+        .cta {
+          margin: 2rem 0.8rem;
+          border-radius: 24px;
+          padding: 3rem 1rem;
+        }
+        .cta h2 {
+          font-size: 1.8rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero-content h1 {
+          font-size: 1.8rem;
+        }
+        .hero-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </head>
 
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <!-- ========== HEADER SEMÁNTICO ========== -->
+    <header class="site-header">
+      <div class="container">
+        <a href="#" class="logo" aria-label="AuraPods Pro - Ir al inicio">
+          <span class="logo-icon">🎧</span>
+          AuraPods
+        </a>
+        <nav aria-label="Navegación principal">
+          <ul class="nav-links">
+            <li><a href="#features">Características</a></li>
+            <li><a href="#testimonials">Opiniones</a></li>
+            <li><a href="#cta">Comprar</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <main>
+      <!-- HERO -->
+      <section class="hero" aria-labelledby="hero-heading">
+        <div class="container">
+          <article class="hero-content">
+            <h1 id="hero-heading">
+              Escucha el futuro con <span class="highlight">AuraPods Pro</span>
+            </h1>
+            <p>
+              Auriculares inalámbricos premium con cancelación de ruido activa,
+              sonido espacial 3D y 40 horas de batería. Diseñados para los que
+              exigen lo mejor.
+            </p>
+            <div class="hero-buttons">
+              <a href="#cta" class="btn btn-primary">🛒 Comprar ahora</a>
+              <a href="#features" class="btn btn-outline">Saber más</a>
+            </div>
+          </article>
+          <aside class="hero-image" aria-label="Imagen del producto">
+            <figure>
+              <img
+                src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop&auto=format"
+                alt="Auriculares AuraPods Pro en color negro mate"
+                width="500"
+                height="500"
+                loading="eager"
+              />
+              <figcaption style="display: none">
+                AuraPods Pro - Auriculares inalámbricos premium
+              </figcaption>
+            </figure>
+          </aside>
+        </div>
+      </section>
+
+      <!-- FEATURES -->
+      <section class="features" id="features" aria-labelledby="features-heading">
+        <div class="container">
+          <h2 class="section-title" id="features-heading">
+            ¿Por qué elegir AuraPods?
+          </h2>
+          <p class="section-subtitle">
+            Cada detalle pensado para una experiencia auditiva incomparable.
+          </p>
+          <div class="features-grid">
+            <article class="feature-card">
+              <div class="feature-icon">🔇</div>
+              <h3>Cancelación de Ruido ANC</h3>
+              <p>
+                Elimina hasta el 98% del ruido exterior con nuestra tecnología
+                adaptativa de cancelación activa.
+              </p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🔋</div>
+              <h3>40 Horas de Batería</h3>
+              <p>
+                Disfruta de música todo el día. El estuche de carga te da 3
+                cargas completas adicionales.
+              </p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🌊</div>
+              <h3>Resistentes al Agua IPX5</h3>
+              <p>
+                Entrena sin preocupaciones. Resisten sudor y salpicaduras para
+                acompañarte en cualquier actividad.
+              </p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🎵</div>
+              <h3>Sonido Espacial 3D</h3>
+              <p>
+                Sumérgete en un escenario sonoro envolvente con drivers de
+                neodimio de alta fidelidad.
+              </p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">📍</div>
+              <h3>GPS Integrado</h3>
+              <p>
+                ¿Perdiste un auricular? Localízalo fácilmente desde la app con
+                el rastreador incorporado.
+              </p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🎤</div>
+              <h3>Micrófonos HD</h3>
+              <p>
+                Llamadas cristalinas con 6 micrófonos y filtrado de viento
+                inteligente.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- TESTIMONIALS -->
+      <section
+        class="testimonials"
+        id="testimonials"
+        aria-labelledby="testimonials-heading"
+      >
+        <div class="container">
+          <h2 class="section-title" id="testimonials-heading">
+            Lo que dicen nuestros clientes
+          </h2>
+          <p class="section-subtitle">
+            Miles de personas ya mejoraron su forma de escuchar música.
+          </p>
+          <div class="testimonials-grid">
+            <figure class="testimonial-card">
+              <blockquote>
+                "La cancelación de ruido es increíble. Los uso en la oficina y
+                no escucho nada más. La batería dura una eternidad."
+              </blockquote>
+              <figcaption class="testimonial-author">
+                <img
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop&auto=format"
+                  alt="María García"
+                  width="44"
+                  height="44"
+                  loading="lazy"
+                />
+                <div>
+                  <strong>María García</strong>
+                  <span>Diseñadora UX</span>
+                </div>
+              </figcaption>
+            </figure>
+            <figure class="testimonial-card">
+              <blockquote>
+                "Los compré para el gimnasio y son perfectos. No se caen, suenan
+                genial y aguantan el sudor sin problemas."
+              </blockquote>
+              <figcaption class="testimonial-author">
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&auto=format"
+                  alt="Carlos Mendoza"
+                  width="44"
+                  height="44"
+                  loading="lazy"
+                />
+                <div>
+                  <strong>Carlos Mendoza</strong>
+                  <span>Entrenador personal</span>
+                </div>
+              </figcaption>
+            </figure>
+            <figure class="testimonial-card">
+              <blockquote>
+                "El modo transparencia es una pasada. Puedo escuchar música y a
+                la vez estar atenta a lo que pasa a mi alrededor."
+              </blockquote>
+              <figcaption class="testimonial-author">
+                <img
+                  src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&auto=format"
+                  alt="Lucía Fernández"
+                  width="44"
+                  height="44"
+                  loading="lazy"
+                />
+                <div>
+                  <strong>Lucía Fernández</strong>
+                  <span>Estudiante</span>
+                </div>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA / PRICING -->
+      <section class="cta" id="cta" aria-labelledby="cta-heading">
+        <div class="container">
+          <span class="price-tag">
+            <span class="old-price">$149.99</span>
+            <span class="new-price">$99.99</span>
+          </span>
+          <h2 id="cta-heading">Lleva tus AuraPods Pro hoy</h2>
+          <p>
+            Oferta por tiempo limitado. Envío gratis a todo el país y 30 días de
+            garantía de devolución.
+          </p>
+          <a href="#" class="btn btn-primary">🛍️ Comprar con descuento</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- ========== FOOTER SEMÁNTICO ========== -->
+    <footer class="site-footer" role="contentinfo">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h4>AuraPods</h4>
+            <p style="font-size: 0.9rem; color: #aaa">
+              Sonido premium para momentos inolvidables.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Producto</h4>
+            <ul>
+              <li><a href="#features">Características</a></li>
+              <li><a href="#">Especificaciones</a></li>
+              <li><a href="#">Comparar</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Soporte</h4>
+            <ul>
+              <li><a href="#">Centro de ayuda</a></li>
+              <li><a href="#">Garantía</a></li>
+              <li><a href="#">Contacto</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="#">Privacidad</a></li>
+              <li><a href="#">Términos</a></li>
+              <li><a href="#">Cookies</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 AuraPods. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>
